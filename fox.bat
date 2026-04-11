@@ -1,27 +1,22 @@
 @echo off
-title FoxCod Interpreter
+title FoxCod 2.6c Comfort
 chcp 65001 >nul
 
-:: Проверяем, перетащили ли файл на батник
 if "%~1"=="" goto interaction
 
 :run_file
 cls
-echo [Запуск %~nx1...]
 python "%~dp0engine.py" "%~1"
 echo.
 echo ------------------------------------------
 echo √ Скрипт выполнен. Консоль активна.
-echo.
 
 :interaction
-echo Введите f для запуска %~nx1 или q для выхода
-set /p choice=Выбор: 
+echo Введите f для запуска, q для выхода (автозакрытие через 5 минут)
+:: Команда choice с таймаутом 300 секунд
+choice /c fq /t 300 /d q /n /m "Ожидание выбора (f/q): "
 
-if /i "%choice%"=="f" goto run_file
-if /i "%choice%"=="q" exit
-if /i "%choice%"=="й" goto run_file
-if /i "%choice%"=="й" exit
+if errorlevel 2 exit
+if errorlevel 1 goto run_file
 
-:: Если ввели что-то другое, просто возвращаемся к выбору
 goto interaction
