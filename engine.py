@@ -8,7 +8,6 @@ import time
 import tkinter as tk
 from tkinter import ttk
 
-# --- ЦВЕТОВАЯ ПАЛИТРА ---
 C_WHITE = "\033[0m"
 C_CYAN = "\033[36m"
 C_GREEN = "\033[32m"
@@ -112,9 +111,17 @@ class FoxEngine:
         print(f"{C_CYAN}{'FoxCod v2.6a stability'.center(50)}{C_WHITE}\n\n")
         with open(self.filename, 'r', encoding="utf-8") as f:
             lines = [l for l in f.readlines() if l.strip() and not l.startswith("#")]
+        
+        total = len(lines)
+        if total == 0: return
+
         for i, line in enumerate(lines, 1):
-            self.draw_global_bar(int((i/len(lines))*100))
-            if not self.execute(line, i): break
+            if not self.execute(line, i): 
+                break
+            self.draw_global_bar(int((i / total) * 100))
+        
+        self.draw_global_bar(100)
+            
         if self.root:
             print(f"\n{C_GREEN}√ ИНФРАСТРУКТУРА ГОТОВА.{C_WHITE}")
             self.apply_dark_theme(); self.root.deiconify(); self.root.mainloop()
